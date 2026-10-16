@@ -47,7 +47,7 @@ public class ReservationService {
                 tr=true;
                 for(Reservation reservation: RESERVATIONS) {
                         if(reservation.getMyRoom() == room) {
-                            if(reservation.getCheckInDate().getDayOfMonth() <checkOutDate.getDayOfMonth() ) {tr = false;}
+                            if(checkOutDate.isBefore(reservation.getCheckInDate())  || reservation.getCheckOutDate().isBefore(checkInDate)) {tr = false;}
                         }
                 }
                 if(tr) {
@@ -62,8 +62,6 @@ public class ReservationService {
 
 
         LocalDate currentDate = LocalDate.now();
-       Period  diff = Period.between(checkInDate,checkOutDate);
-        Period diff2 = Period.between(currentDate,checkInDate);
 
 //       if(diff.getDays()<1) {
 //           return false;
@@ -72,9 +70,11 @@ public class ReservationService {
 //           return false;
 //       }
 
-        if(diff.getDays()<1 || diff2.getDays()<1) {
-            throw new DateTimeException("Invalid checkIN checkOUT Date"+ currentDate + " " + checkInDate + " " + checkOutDate);
+        if(checkInDate.isBefore(checkOutDate) && currentDate.isBefore(checkInDate)) {
+            return;
         }
+        throw new DateTimeException("Invalid checkIN checkOUT Date"+ currentDate + " " + checkInDate + " " + checkOutDate);
+
     }
 
     public Collection<Reservation> getCustomerReservation() {

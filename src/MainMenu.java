@@ -42,7 +42,7 @@ while(reccuring) {
                  checkInDate = LocalDate.parse(checkInDateInput,formatter);
                  checkOutDate = LocalDate.parse(checkOutDateInput,formatter);
                  Collection<IRoom> rooms = hotelResource.findARoom(checkInDate,checkOutDate);
-                 if(rooms.isEmpty()){  rooms = hotelResource.findARoom(checkInDate.plusDays(7),checkOutDate.plusDays(7));}
+                 if(rooms.isEmpty()){  rooms = hotelResource.findARoom(checkInDate.plusDays(7),checkOutDate.plusDays(7)); checkInDate.plusDays(7); checkOutDate.plusDays(7);}
                  if(rooms.isEmpty()) { System.out.println("No rooms found Please try again");}
                  else {
                      System.out.println("Rooms Available: \n");
@@ -58,6 +58,9 @@ while(reccuring) {
                  }
             } catch (DateTimeException e) {
                 System.out.println("Invalid Date please try again");
+            }
+            catch (NullPointerException ne) {
+                System.out.println("Invaidate Room selected");
             }
 
 
